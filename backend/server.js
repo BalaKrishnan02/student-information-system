@@ -39,8 +39,8 @@ app.get('/', (req, res) => {
     res.send('Student Information System API is running');
 });
 
-// Dynamic QR zip endpoint
-app.get('/qrcode/:role_qrcodes.zip', async (req, res) => {
+// Zip download endpoint for syncing to local machine
+app.get('/api/sync-qrs/:role', async (req, res) => {
     const role = req.params.role;
     if (!['student', 'teacher', 'admin'].includes(role)) {
         return res.status(400).send('Invalid role');
