@@ -181,7 +181,9 @@ const TeacherDashboard = () => {
                             </div>
                             <div>
                                 <h1 style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: '700', margin: 0 }}>
-                                    Welcome, <span className="teacher-gradient-text" style={{ WebkitTextFillColor: '#a7f3d0' }}>{teacherProfile?.name?.split(' ')[0] || 'Instructor'}</span>
+                                    Welcome, <span style={{ color: '#a7f3d0' }}>
+                                        {teacherProfile?.name || 'Instructor'}
+                                    </span>
                                 </h1>
                                 <div style={{ display: 'flex', gap: '8px', marginTop: '4px', flexWrap: 'wrap' }}>
                                     <span style={{ background: 'rgba(255,255,255,0.15)', padding: '2px 10px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: '500' }}>

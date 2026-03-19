@@ -35,7 +35,10 @@ router.get('/all', async (req, res) => {
         const { instructor } = req.query;
         let query = {};
         if (instructor) {
-            query.instructor = instructor;
+            // Space-tolerant, case-insensitive regex to handle name variations (e.g. Mrs. B vs Mrs.B)
+            const escapedName = instructor.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special chars
+            const fuzzyName = escapedName.split(/\s+/).join('\\s*');
+            query.instructor = { $regex: new RegExp(`^${fuzzyName}$`, 'i') };
         }
         const courses = await Course.find(query);
         res.json(courses);

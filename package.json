@@ -7,12 +7,17 @@
     "dev": "npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "backend": "npm run dev --prefix backend",
     "frontend": "npm run dev --prefix frontend",
-    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend"
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "build": "npm run install-all"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "dependencies": {
-    "nodemailer": "^7.0.13"
+    "nodemailer": "^7.0.13",
+    "concurrently": "^9.2.1"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
   }
 }
+
