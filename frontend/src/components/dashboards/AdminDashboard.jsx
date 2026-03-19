@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../../config';
 
 
 const AdminDashboard = () => {
+    const isMobile = window.innerWidth <= 768;
     const [activeTab, setActiveTab] = useState('overview');
     const [stats, setStats] = useState({ students: 0, teachers: 0, courses: 0 });
     const [students, setStudents] = useState([]);
@@ -173,7 +174,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="admin-dashboard">
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem 2rem', gap: '1.25rem' }}>
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', padding: isMobile ? '1rem 0.5rem' : '1.5rem 2rem', gap: '1.25rem' }}>
 
                 {/* ── Hero Banner ── */}
                 <div className="admin-hero animate-fadeInUp">
@@ -234,15 +235,16 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* ── Tab Switcher ── */}
-                <div className="animate-fadeInUp stagger-1" style={{ display: 'flex', gap: '0.25rem', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', padding: '4px', borderRadius: '14px', width: 'fit-content', border: '1px solid var(--border-light)' }}>
+                <div className="animate-fadeInUp stagger-1" style={{ display: 'flex', gap: '0.25rem', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', padding: '4px', borderRadius: '14px', width: isMobile ? '100%' : 'fit-content', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                     {mainTabs.map(tab => (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                             style={{
                                 background: activeTab === tab.id ? 'white' : 'transparent',
                                 border: 'none', color: activeTab === tab.id ? '#581c87' : 'var(--text-muted)',
-                                padding: '10px 18px', cursor: 'pointer', fontSize: '0.88rem', fontWeight: activeTab === tab.id ? '600' : '500',
-                                borderRadius: '10px', transition: 'all 0.25s', display: 'flex', alignItems: 'center', gap: '7px',
-                                boxShadow: activeTab === tab.id ? 'var(--shadow-sm)' : 'none'
+                                padding: isMobile ? '8px 12px' : '10px 18px', cursor: 'pointer', fontSize: isMobile ? '0.75rem' : '0.88rem', fontWeight: activeTab === tab.id ? '600' : '500',
+                                borderRadius: '100px', transition: 'all 0.25s', display: 'flex', alignItems: 'center', gap: '7px',
+                                boxShadow: activeTab === tab.id ? 'var(--shadow-sm)' : 'none',
+                                whiteSpace: 'nowrap'
                             }}>
                             <span style={{ fontSize: '0.95rem' }}>{tab.icon}</span> {tab.label}
                         </button>
@@ -250,8 +252,8 @@ const AdminDashboard = () => {
                     {isFormTab && (
                         <button style={{
                             background: 'white', border: 'none', color: '#7c3aed',
-                            padding: '10px 18px', fontSize: '0.88rem', fontWeight: '600',
-                            borderRadius: '10px', boxShadow: 'var(--shadow-sm)', cursor: 'default'
+                            padding: isMobile ? '8px 12px' : '10px 18px', fontSize: isMobile ? '0.75rem' : '0.88rem', fontWeight: '600',
+                            borderRadius: '100px', boxShadow: 'var(--shadow-sm)', cursor: 'default', whiteSpace: 'nowrap'
                         }}>
                             {activeTab === 'make-student' ? (isEditing ? 'Edit Student' : '+ New Student') : activeTab === 'make-teacher' ? (isEditing ? 'Edit Teacher' : '+ New Teacher') : (isEditing ? 'Edit Course' : '+ New Course')}
                         </button>
@@ -289,7 +291,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><GraduationCap size={18} /> Manage Students</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{students.length} records</span>
                             </div>
-                            <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Photo</th><th>Student ID</th><th>Full Name</th><th>Email</th><th>Dept</th><th>Grade</th><th>Actions</th></tr></thead>
                                     <tbody>
@@ -329,7 +331,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={18} /> Manage Teachers</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{teachers.length} records</span>
                             </div>
-                            <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Designation</th><th>Email</th><th>Actions</th></tr></thead>
                                     <tbody>
@@ -362,7 +364,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={18} /> Manage Courses</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{courses.length} programs</span>
                             </div>
-                            <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Code</th><th>Course Name</th><th>Credits</th><th>Instructor</th><th>Status</th><th>Actions</th></tr></thead>
                                     <tbody>
@@ -422,8 +424,8 @@ const AdminDashboard = () => {
                                 </div>
 
                                 <div style={sectionTitleStyle}>Address</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem' }}>
-                                    <div style={{ gridColumn: 'span 3' }}><label style={labelStyle}>Street</label><input aria-label="Street Address" style={inputStyle} value={studentForm.address} onChange={e => setStudentForm({ ...studentForm, address: e.target.value })} placeholder="Street Address" onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
+                                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem' }}>
+                                    <div style={{ gridColumn: isMobile ? 'auto' : 'span 3' }}><label style={labelStyle}>Street</label><input aria-label="Street Address" style={inputStyle} value={studentForm.address} onChange={e => setStudentForm({ ...studentForm, address: e.target.value })} placeholder="Street Address" onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div><label style={labelStyle}>City</label><input aria-label="City" style={inputStyle} value={studentForm.city} onChange={e => setStudentForm({ ...studentForm, city: e.target.value })} placeholder="City" onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div>
                                         <label style={labelStyle}>State</label>
@@ -473,8 +475,8 @@ const AdminDashboard = () => {
                                     <div><label style={labelStyle}>Phone</label><input style={inputStyle} value={teacherForm.phone} onChange={e => setTeacherForm({ ...teacherForm, phone: e.target.value })} onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                 </div>
                                 <div style={sectionTitleStyle}>Address</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem' }}>
-                                    <div style={{ gridColumn: 'span 3' }}><label style={labelStyle}>Street</label><input aria-label="Street Address" style={inputStyle} value={teacherForm.address} onChange={e => setTeacherForm({ ...teacherForm, address: e.target.value })} onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
+                                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem' }}>
+                                    <div style={{ gridColumn: isMobile ? 'auto' : 'span 3' }}><label style={labelStyle}>Street</label><input aria-label="Street Address" style={inputStyle} value={teacherForm.address} onChange={e => setTeacherForm({ ...teacherForm, address: e.target.value })} onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div><label style={labelStyle}>City</label><input aria-label="City" style={inputStyle} value={teacherForm.city} onChange={e => setTeacherForm({ ...teacherForm, city: e.target.value })} onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div>
                                         <label style={labelStyle}>State</label>

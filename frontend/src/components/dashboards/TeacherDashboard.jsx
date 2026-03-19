@@ -6,6 +6,7 @@ import { API_BASE_URL } from '../../config';
 
 
 const TeacherDashboard = () => {
+    const isMobile = window.innerWidth <= 768;
     const { user } = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState('grading');
     const [examType, setExamType] = useState('CAT-1');
@@ -163,14 +164,14 @@ const TeacherDashboard = () => {
 
     return (
         <div className="teacher-dashboard">
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem 2rem', gap: '1.25rem' }}>
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', padding: isMobile ? '1rem 0.5rem' : '1.5rem 2rem', gap: '1.25rem' }}>
 
                 {/* ── Hero Banner ── */}
                 <div className="teacher-hero animate-fadeInUp">
-                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: isMobile ? '100%' : 'auto' }}>
                             <div style={{
-                                width: '56px', height: '56px', borderRadius: '16px',
+                                width: isMobile ? '48px' : '56px', height: isMobile ? '48px' : '56px', borderRadius: '16px',
                                 background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 fontSize: '1.5rem', fontWeight: '700', color: 'white',
@@ -179,29 +180,26 @@ const TeacherDashboard = () => {
                                 {teacherProfile?.name?.[0] || 'T'}
                             </div>
                             <div>
-                                <h1 style={{ fontSize: '1.5rem', fontWeight: '700', margin: 0 }}>
-                                    Welcome, <span className="teacher-gradient-text" style={{ WebkitTextFillColor: '#a7f3d0' }}>{teacherProfile?.name || 'Instructor'}</span>
+                                <h1 style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: '700', margin: 0 }}>
+                                    Welcome, <span className="teacher-gradient-text" style={{ WebkitTextFillColor: '#a7f3d0' }}>{teacherProfile?.name?.split(' ')[0] || 'Instructor'}</span>
                                 </h1>
-                                <div style={{ display: 'flex', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
-                                    <span style={{ background: 'rgba(255,255,255,0.15)', padding: '3px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '500' }}>
-                                        {teacherProfile?.department || 'Department'}
-                                    </span>
-                                    <span style={{ background: 'rgba(255,255,255,0.15)', padding: '3px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '500' }}>
-                                        {teacherProfile?.designation || 'Designation'}
+                                <div style={{ display: 'flex', gap: '8px', marginTop: '4px', flexWrap: 'wrap' }}>
+                                    <span style={{ background: 'rgba(255,255,255,0.15)', padding: '2px 10px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: '500' }}>
+                                        {teacherProfile?.department || 'Dept'}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Quick stats */}
-                        <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '10px 18px', borderRadius: '12px', textAlign: 'center', minWidth: '80px' }}>
-                                <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{courses.length}</div>
-                                <div style={{ fontSize: '0.72rem', opacity: 0.85, marginTop: '2px' }}>Courses</div>
+                        {/* Quick stats & Actions */}
+                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', width: isMobile ? '100%' : 'auto', overflowX: 'auto', paddingBottom: '4px' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '8px 14px', borderRadius: '12px', textAlign: 'center', flex: 1, minWidth: '70px' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{courses.length}</div>
+                                <div style={{ fontSize: '0.65rem', opacity: 0.85 }}>Classes</div>
                             </div>
-                            <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '10px 18px', borderRadius: '12px', textAlign: 'center', minWidth: '80px' }}>
-                                <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{students.length}</div>
-                                <div style={{ fontSize: '0.72rem', opacity: 0.85, marginTop: '2px' }}>Students</div>
+                            <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '8px 14px', borderRadius: '12px', textAlign: 'center', flex: 1, minWidth: '70px' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{students.length}</div>
+                                <div style={{ fontSize: '0.65rem', opacity: 0.85 }}>Students</div>
                             </div>
                         </div>
                     </div>
@@ -210,15 +208,16 @@ const TeacherDashboard = () => {
                 {/* ── Course Selector + Tabs ── */}
                 <div className="animate-fadeInUp stagger-1" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                     {/* Tab Switcher */}
-                    <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', padding: '4px', borderRadius: '14px', border: '1px solid var(--border-light)' }}>
+                    <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', padding: '4px', borderRadius: '14px', border: '1px solid var(--border-light)', width: isMobile ? '100%' : 'fit-content', overflowX: 'auto' }}>
                         {tabs.map(tab => (
                             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                                 style={{
                                     background: activeTab === tab.id ? 'white' : 'transparent',
                                     border: 'none', color: activeTab === tab.id ? '#065f46' : 'var(--text-muted)',
-                                    padding: '10px 20px', cursor: 'pointer', fontSize: '0.88rem', fontWeight: activeTab === tab.id ? '600' : '500',
+                                    padding: isMobile ? '8px 12px' : '10px 20px', cursor: 'pointer', fontSize: isMobile ? '0.75rem' : '0.88rem', fontWeight: activeTab === tab.id ? '600' : '500',
                                     borderRadius: '10px', transition: 'all 0.25s', display: 'flex', alignItems: 'center', gap: '6px',
-                                    boxShadow: activeTab === tab.id ? 'var(--shadow-sm)' : 'none'
+                                    boxShadow: activeTab === tab.id ? 'var(--shadow-sm)' : 'none',
+                                    whiteSpace: 'nowrap'
                                 }}>
                                 <span style={{ fontSize: '0.95rem' }}>{tab.icon}</span> {tab.label}
                             </button>
@@ -226,10 +225,10 @@ const TeacherDashboard = () => {
                     </div>
 
                     {/* Course Selector */}
-                    <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '10px', borderRadius: '14px', border: '1px solid var(--border-light)' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '10px', borderRadius: '14px', border: '1px solid var(--border-light)', width: isMobile ? '100%' : 'fit-content' }}>
                         <span style={{ fontSize: '0.75rem', fontWeight: '600', textTransform: 'uppercase', color: '#065f46', letterSpacing: '0.04em' }}>Class:</span>
                         <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}
-                            style={{ padding: '4px 8px', borderRadius: '8px', border: 'none', fontWeight: '500', background: 'transparent', color: 'var(--text-main)', outline: 'none', cursor: 'pointer', fontSize: '0.9rem' }}>
+                            style={{ padding: '4px 8px', borderRadius: '8px', border: 'none', fontWeight: '500', background: 'transparent', color: 'var(--text-main)', outline: 'none', cursor: 'pointer', fontSize: '0.9rem', width: '100%' }}>
                             {courses.length > 0 ? courses.map(c => (
                                 <option key={c.courseId} value={c.courseId}>{c.courseId} - {c.courseName}</option>
                             )) : <option value="">No Classes Assigned</option>}
@@ -247,31 +246,31 @@ const TeacherDashboard = () => {
                     ) : activeTab === 'grading' ? (
                         <div className="glass-card" style={{ borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             {/* Toolbar */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', padding: '1.25rem 1.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
-                                <div>
+                            <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', padding: '1.25rem 1.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.15)', gap: '1rem' }}>
+                                <div style={{ width: isMobile ? '100%' : 'auto' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                         <select value={examType} onChange={e => setExamType(e.target.value)}
-                                            style={{ padding: '8px 14px', borderRadius: '10px', border: '1.5px solid rgba(16, 185, 129, 0.3)', fontWeight: '600', color: '#065f46', background: 'white', fontSize: '0.95rem', cursor: 'pointer', outline: 'none' }}>
+                                            style={{ padding: '8px 14px', borderRadius: '10px', border: '1.5px solid rgba(16, 185, 129, 0.3)', fontWeight: '600', color: '#065f46', background: 'white', fontSize: '0.95rem', cursor: 'pointer', outline: 'none', width: '100%' }}>
                                             <option value="CAT-1">CAT-1 Assessment</option>
                                             <option value="CAT-2">CAT-2 Assessment</option>
                                             <option value="MODEL">MODEL Assessment</option>
                                         </select>
                                     </div>
-                                    <p style={{ margin: '8px 0 0', color: '#065f46', fontSize: '0.82rem', opacity: 0.7 }}>Record marks and auto-calculate grades</p>
+                                    {!isMobile && <p style={{ margin: '8px 0 0', color: '#065f46', fontSize: '0.82rem', opacity: 0.7 }}>Record marks and auto-calculate grades</p>}
                                 </div>
                                 <button onClick={saveGrades}
                                     style={{
                                         background: saveStatus === 'Saved ✓' ? '#059669' : 'linear-gradient(135deg, #065f46 0%, #059669 100%)',
                                         color: 'white', border: 'none', padding: '10px 24px', borderRadius: '100px',
                                         fontWeight: '600', cursor: 'pointer', fontSize: '0.9rem', transition: 'all 0.25s',
-                                        boxShadow: '0 2px 10px rgba(5, 150, 105, 0.2)'
+                                        boxShadow: '0 2px 10px rgba(5, 150, 105, 0.2)', width: isMobile ? '100%' : 'auto'
                                     }}>
                                     {saveStatus || <><Sparkles size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />Publish Grades</>}
                                 </button>
                             </div>
 
                             {/* Grades Table */}
-                            <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Student</th><th>Semester</th><th>Score</th><th>Grade</th><th>Grade Points</th><th>Status</th></tr></thead>
                                     <tbody>
@@ -286,8 +285,8 @@ const TeacherDashboard = () => {
                                                                 {s.studentName?.[0] || 'S'}
                                                             </div>
                                                             <div>
-                                                                <div style={{ fontWeight: '500', fontSize: '0.93rem' }}>{s.studentName}</div>
-                                                                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{s.studentId}</div>
+                                                                 <div style={{ fontWeight: '500', fontSize: '0.93rem' }}>{s.studentName}</div>
+                                                                 <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{s.studentId}</div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -317,18 +316,18 @@ const TeacherDashboard = () => {
                     ) : (
                         <div className="glass-card" style={{ borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             {/* Attendance Toolbar */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', padding: '1.25rem 1.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
-                                <div>
+                            <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', padding: '1.25rem 1.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.15)', gap: '1rem' }}>
+                                <div style={{ width: isMobile ? '100%' : 'auto' }}>
                                     <h3 style={{ margin: 0, fontWeight: '600', fontSize: '1.1rem', color: '#065f46' }}>📋 Daily Attendance Log</h3>
                                     <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: isMobile ? '100%' : 'auto' }}>
                                             <span style={{ fontSize: '0.82rem', fontWeight: '500', color: '#065f46' }}>Date:</span>
                                             <input type="date" value={attendanceDate} onChange={(e) => setAttendanceDate(e.target.value)}
-                                                style={{ padding: '8px 12px', borderRadius: '10px', border: '1.5px solid rgba(16, 185, 129, 0.3)', fontWeight: '500', background: 'white', color: 'var(--text-main)', outline: 'none' }} />
+                                                style={{ padding: '8px 12px', borderRadius: '10px', border: '1.5px solid rgba(16, 185, 129, 0.3)', fontWeight: '500', background: 'white', color: 'var(--text-main)', outline: 'none', width: isMobile ? '100%' : 'auto' }} />
                                         </div>
                                         <div style={{ display: 'flex', gap: '8px' }}>
-                                            <span style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#166534', padding: '4px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '600' }}>Present: {presentToday}</span>
-                                            <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#991b1b', padding: '4px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '600' }}>Absent: {absentToday}</span>
+                                            <span style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#166534', padding: '4px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '600' }}>P: {presentToday}</span>
+                                            <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#991b1b', padding: '4px 12px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: '600' }}>A: {absentToday}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -337,14 +336,14 @@ const TeacherDashboard = () => {
                                         background: saveStatus === 'Saved ✓' ? '#059669' : 'linear-gradient(135deg, #065f46 0%, #059669 100%)',
                                         color: 'white', border: 'none', padding: '10px 24px', borderRadius: '100px',
                                         fontWeight: '600', cursor: 'pointer', fontSize: '0.9rem', transition: 'all 0.25s',
-                                        boxShadow: '0 2px 10px rgba(5, 150, 105, 0.2)'
+                                        boxShadow: '0 2px 10px rgba(5, 150, 105, 0.2)', width: isMobile ? '100%' : 'auto'
                                     }}>
                                     {saveStatus || <><Save size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />Save Log</>}
                                 </button>
                             </div>
 
                             {/* Attendance Table */}
-                            <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Student</th><th style={{ textAlign: 'center' }}>Present</th><th style={{ textAlign: 'center' }}>Absent</th><th>Status</th><th style={{ textAlign: 'center' }}>Action</th></tr></thead>
                                     <tbody>
