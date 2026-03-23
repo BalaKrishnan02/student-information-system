@@ -18,7 +18,8 @@ const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5174',
     'http://localhost:3000',
-    'https://student-information-system-mu.vercel.app'
+    'https://student-information-system-mu.vercel.app',
+    'https://acadex-mu.vercel.app'
 ];
 
 app.use(cors({
