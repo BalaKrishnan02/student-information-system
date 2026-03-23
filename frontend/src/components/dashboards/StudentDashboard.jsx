@@ -195,7 +195,7 @@ const StudentDashboard = () => {
                                     <span style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#1e3a8a', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{enrollments.length} courses</span>
                                 </div>
                             </div>
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Code</th><th>Name</th><th>Credits</th><th>Instructor</th><th>Status</th><th style={{ textAlign: 'center' }}>Attendance Action</th></tr></thead>
                                     <tbody>

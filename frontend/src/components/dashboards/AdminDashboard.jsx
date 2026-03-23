@@ -291,7 +291,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><GraduationCap size={18} /> Manage Students</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{students.length} records</span>
                             </div>
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Photo</th><th>Student ID</th><th>Full Name</th><th>Email</th><th>Dept</th><th>Grade</th><th>Actions</th></tr></thead>
                                     <tbody>
@@ -331,7 +331,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={18} /> Manage Teachers</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{teachers.length} records</span>
                             </div>
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Designation</th><th>Email</th><th>Actions</th></tr></thead>
                                     <tbody>
@@ -364,7 +364,7 @@ const AdminDashboard = () => {
                                 <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#581c87', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={18} /> Manage Courses</h3>
                                 <span style={{ background: 'rgba(124, 58, 237, 0.1)', color: '#581c87', padding: '6px 14px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: '600' }}>{courses.length} programs</span>
                             </div>
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Code</th><th>Course Name</th><th>Credits</th><th>Instructor</th><th>Status</th><th>Actions</th></tr></thead>
                                     <tbody>

@@ -272,7 +272,7 @@ const TeacherDashboard = () => {
                             </div>
 
                             {/* Grades Table */}
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Student</th><th>Semester</th><th>Score</th><th>Grade</th><th>Grade Points</th><th>Status</th></tr></thead>
                                     <tbody>
@@ -345,7 +345,7 @@ const TeacherDashboard = () => {
                             </div>
 
                             {/* Attendance Table */}
-                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                            <div className="table-responsive" style={{ borderRadius: 'var(--radius-sm)', overflowX: 'auto', border: '1px solid var(--border-light)' }}>
                                 <table>
                                     <thead><tr><th>Student</th><th style={{ textAlign: 'center' }}>Present</th><th style={{ textAlign: 'center' }}>Absent</th><th>Status</th><th style={{ textAlign: 'center' }}>Action</th></tr></thead>
                                     <tbody>
