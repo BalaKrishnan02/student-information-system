@@ -4,6 +4,10 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+// Fix for ISP DNS blocking SRV records on local
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+
 const User = require('./models/User');
 
 const QR_BASE_DIR = path.join(__dirname, 'qrcode');
