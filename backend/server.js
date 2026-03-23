@@ -1,3 +1,7 @@
+// Use Google DNS to resolve MongoDB Atlas SRV records (fixes ISP DNS blocking)
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
