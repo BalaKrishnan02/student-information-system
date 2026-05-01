@@ -5,7 +5,7 @@ const { getDistance } = require('../utils/distance');
 
 // Predefined Campus Location (Kalitheerthalkuppam, Puducherry - 605107)
 const CAMPUS_COORDS = { lat: 11.922010, lng: 79.626860 };
-const MAX_RADIUS_KM = 200000; // Increased radius for testing
+const MAX_RADIUS_KM = 0.2; // Campus range limit is 200 meters (0.2 km)
 
 
 // Auto Mark Attendance via 
@@ -17,9 +17,17 @@ router.post('/auto-mark', async (req, res) => {
             return res.status(400).json({ error: "Missing required fields (studentId, courseId, latitude, longitude)" });
         }
 
-        const distance = getDistance(latitude, longitude, CAMPUS_COORDS.lat, CAMPUS_COORDS.lng);
+        const lat = parseFloat(latitude);
+        const lng = parseFloat(longitude);
+        const distance = getDistance(lat, lng, CAMPUS_COORDS.lat, CAMPUS_COORDS.lng);
+
+        console.log(`[Attendance] Checking distance for student ${studentId}:`);
+        console.log(`- Student location: (${lat}, ${lng})`);
+        console.log(`- Campus location: (${CAMPUS_COORDS.lat}, ${CAMPUS_COORDS.lng})`);
+        console.log(`- Calculated distance: ${(distance * 1000).toFixed(2)}m (Required: <= 200m)`);
 
         if (distance > MAX_RADIUS_KM) {
+            console.log(`[Attendance] Out of range! Marking blocked.`);
             return res.status(403).json({
                 error: `Outside Campus range. Distance: ${(distance * 1000).toFixed(0)}m. Range is 200m.`
             });

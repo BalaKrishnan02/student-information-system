@@ -26,9 +26,9 @@ const Auth = () => {
         const startScanner = async () => {
             try {
                 html5QrCode = new Html5Qrcode("reader");
-                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-                await html5QrCode.start(
-                    { facingMode: "user" },
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } }; const cameras = await Html5Qrcode.getCameras().catch(() => []); const cam = cameras && cameras.length > 0 ? cameras[0].id : { facingMode: "environment" };
+                await html5QrCode.start(cam, config, onScanSuccess).catch(() => html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)); if(false) await html5QrCode.start(
+                    cam,
                     config,
                     onScanSuccess
                 );

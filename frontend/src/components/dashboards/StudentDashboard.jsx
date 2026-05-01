@@ -38,10 +38,11 @@ const StudentDashboard = () => {
         navigator.geolocation.getCurrentPosition(async (position) => {
             try {
                 const { latitude, longitude } = position.coords;
+                console.log(`[GPS] Captured coordinates: lat=${latitude}, lng=${longitude}`);
                 const res = await axios.post(`${API_BASE_URL}/api/attendance/auto-mark`, {
                     studentId: user.username, courseId, latitude, longitude
                 });
-                alert(res.data.message);
+                alert(`Success: ${res.data.message}\n(Calculated distance: ${res.data.details?.distance || 'N/A'})`);
                 fetchStudentData(); // Refresh UI to show updated attendance count
             } catch (err) {
                 alert("Attendance Failed: " + (err.response?.data?.error || "Connection Error"));
