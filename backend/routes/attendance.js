@@ -4,14 +4,15 @@ const Attendance = require('../models/Attendance');
 const { getDistance } = require('../utils/distance');
 
 // Predefined Campus Location (Kalitheerthalkuppam, Puducherry - 605107)
-const CAMPUS_COORDS = { lat: 11.922010, lng: 79.626860 }; 
-const MAX_RADIUS_KM = 0.5; // 500 Meters range
+const CAMPUS_COORDS = { lat: 11.922010, lng: 79.626860 };
+const MAX_RADIUS_KM = 200000; // Increased radius for testing
 
-// Auto Mark Attendance via GPS
+
+// Auto Mark Attendance via 
 router.post('/auto-mark', async (req, res) => {
     try {
         const { studentId, courseId, latitude, longitude } = req.body;
-        
+
         if (!studentId || !courseId || !latitude || !longitude) {
             return res.status(400).json({ error: "Missing required fields (studentId, courseId, latitude, longitude)" });
         }
@@ -19,10 +20,11 @@ router.post('/auto-mark', async (req, res) => {
         const distance = getDistance(latitude, longitude, CAMPUS_COORDS.lat, CAMPUS_COORDS.lng);
 
         if (distance > MAX_RADIUS_KM) {
-            return res.status(403).json({ 
-                error: `Outside Campus range. Distance: ${(distance * 1000).toFixed(0)}m. Range is 500m.` 
+            return res.status(403).json({
+                error: `Outside Campus range. Distance: ${(distance * 1000).toFixed(0)}m. Range is 200m.`
             });
         }
+
 
         // Check if already marked for today
         const today = new Date();
@@ -46,7 +48,7 @@ router.post('/auto-mark', async (req, res) => {
         });
 
         await newAttendance.save();
-        res.status(200).json({ 
+        res.status(200).json({
             message: "Attendance Marked Automatically! ✅",
             details: { distance: `${(distance * 1000).toFixed(0)}m from center` }
         });

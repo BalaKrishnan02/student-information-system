@@ -110,6 +110,8 @@ router.put('/update/:id', upload.single('photo'), async (req, res) => {
         const updateData = { ...req.body };
         if (req.file) {
             updateData.photo = req.file.filename;
+        } else if (req.body.removePhoto === 'true' || req.body.photo === '') {
+            updateData.photo = '';
         }
 
         const updatedStudent = await Student.findOneAndUpdate(

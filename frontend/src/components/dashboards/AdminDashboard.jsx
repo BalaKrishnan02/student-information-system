@@ -408,9 +408,20 @@ const AdminDashboard = () => {
                                     <div><label style={labelStyle}>Email Address</label><input type="email" style={inputStyle} value={studentForm.email} onChange={e => setStudentForm({ ...studentForm, email: e.target.value })} placeholder="email@example.com" required onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div>
                                         <label style={labelStyle}>Photo</label>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                                             <input type="file" accept="image/*" onChange={handlePhotoChange} style={{ ...inputStyle, padding: '8px' }} />
-                                            {studentPhotoPreview && <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #7c3aed', flexShrink: 0 }}><img src={studentPhotoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>}
+                                            {studentPhotoPreview && (
+                                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
+                                                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #7c3aed' }}>
+                                                        <img src={studentPhotoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    </div>
+                                                    <button type="button" onClick={() => {
+                                                        setStudentForm({ ...studentForm, photo: '' });
+                                                        setStudentPhoto(null);
+                                                        setStudentPhotoPreview(null);
+                                                    }} style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fee2e2', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '500' }}>Remove</button>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -440,6 +451,18 @@ const AdminDashboard = () => {
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
                                     <div><label style={labelStyle}>Grade / Year</label><input style={inputStyle} value={studentForm.grade} onChange={e => setStudentForm({ ...studentForm, grade: e.target.value })} placeholder="10" onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
                                     <div><label style={labelStyle}>School</label><input style={inputStyle} value={studentForm.school} onChange={e => setStudentForm({ ...studentForm, school: e.target.value })} placeholder="School Name" onFocus={e => e.target.style.borderColor = '#7c3aed'} onBlur={e => e.target.style.borderColor = 'var(--border)'} /></div>
+                                    <div><label style={labelStyle}>Semester</label>
+                                        <select style={inputStyle} value={studentForm.semester} onChange={e => setStudentForm({ ...studentForm, semester: e.target.value })}>
+                                            <option value="Sem 1">Sem 1</option>
+                                            <option value="Sem 2">Sem 2</option>
+                                            <option value="Sem 3">Sem 3</option>
+                                            <option value="Sem 4">Sem 4</option>
+                                            <option value="Sem 5">Sem 5</option>
+                                            <option value="Sem 6">Sem 6</option>
+                                            <option value="Sem 7">Sem 7</option>
+                                            <option value="Sem 8">Sem 8</option>
+                                        </select>
+                                    </div>
                                     <div><label style={labelStyle}>Department</label><select style={inputStyle} value={studentForm.department} onChange={e => setStudentForm({ ...studentForm, department: e.target.value })}><option value="CS">Computer Science</option><option value="Information Technology">IT</option><option value="ECE">Electronics</option><option value="ME">Mechanical</option><option value="Civil">Civil</option><option value="EEE">Electrical</option></select></div>
                                 </div>
 

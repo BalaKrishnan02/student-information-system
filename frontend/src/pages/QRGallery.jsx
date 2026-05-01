@@ -3,7 +3,6 @@ import axios from 'axios';
 import { GraduationCap, Users, Shield, Download, ArrowLeft } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 
-
 const QRGallery = () => {
     const [qrcodes, setQrcodes] = useState({ student: [], teacher: [], admin: [] });
 
@@ -22,6 +21,68 @@ const QRGallery = () => {
                 admin: aRes.data.map(a => ({ id: a.username, name: a.username, url: `${API_BASE_URL}/qrcode/admin/${a.username}_qr.png` }))
             });
         } catch (err) { console.error(err); }
+    };
+
+    const downloadQRZip = async (role) => {
+        const endpoints = [
+            `${API_BASE_URL}/api/qrcode-download/${role}`,
+            `http://localhost:5000/api/qrcode-download/${role}`,
+            `${API_BASE_URL}/qrcode/${role}_qrcodes.zip`,
+            `http://localhost:5000/qrcode/${role}_qrcodes.zip`,
+            `${API_BASE_URL}/qrcode-zip/${role}`,
+            `http://localhost:5000/qrcode-zip/${role}`
+        ];
+
+        let success = false;
+        for (const url of endpoints) {
+            try {
+                const response = await axios.get(url, { responseType: 'blob' });
+                const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.setAttribute('download', `${role}_qrcodes.zip`);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                success = true;
+                break;
+            } catch (err) {
+                console.warn(`Failed to download from ${url}, trying fallback if available.`);
+            }
+        }
+
+        if (!success) {
+            alert('Failed to download the QR code zip file. Please try again.');
+        }
+    };
+
+    const downloadAllQRs = async () => {
+        const endpoints = [
+            `${API_BASE_URL}/api/qrcode-download-all`,
+            `http://localhost:5000/api/qrcode-download-all`
+        ];
+
+        let success = false;
+        for (const url of endpoints) {
+            try {
+                const response = await axios.get(url, { responseType: 'blob' });
+                const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.setAttribute('download', 'all_qrcodes.zip');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                success = true;
+                break;
+            } catch (err) {
+                console.warn(`Failed to download all from ${url}, trying fallback.`);
+            }
+        }
+
+        if (!success) {
+            alert('Failed to download all QR codes zip file. Please try again.');
+        }
     };
 
     const roleConfig = {
@@ -56,17 +117,27 @@ const QRGallery = () => {
                         </div>
                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                             {['student', 'teacher', 'admin'].map(role => (
-                                <a key={role} href={`${API_BASE_URL}/qrcode/${role}_qrcodes.zip`} download
+                                <button key={role} onClick={() => downloadQRZip(role)}
                                     style={{
-                                        background: downloadBtns[role].bg, color: 'white', padding: '9px 18px', borderRadius: '100px',
-                                        fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
+                                        background: downloadBtns[role].bg, color: 'white', padding: '9px 18px', borderRadius: '100px', border: 'none',
+                                        fontSize: '0.82rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer',
                                         transition: 'transform 0.2s, box-shadow 0.2s'
                                     }}
-                                    onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)'; }}
-                                    onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'none'; }}>
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
                                     <Download size={14} /> {role.charAt(0).toUpperCase() + role.slice(1)}s
-                                </a>
+                                </button>
                             ))}
+                            <button onClick={downloadAllQRs}
+                                style={{
+                                    background: 'linear-gradient(135deg, #ec4899, #8b5cf6)', color: 'white', padding: '9px 18px', borderRadius: '100px', border: 'none',
+                                    fontSize: '0.82rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer',
+                                    transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 4px 12px rgba(236, 72, 153, 0.25)'
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(236, 72, 153, 0.35)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(236, 72, 153, 0.25)'; }}>
+                                <Download size={14} /> Download All
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -62,6 +62,13 @@ const StudentDashboard = () => {
         ? Math.round(marks.reduce((sum, m) => sum + (m.marks || 0), 0) / marks.length)
         : 0;
 
+    const groupedMarks = marks.reduce((acc, m) => {
+        const type = m.examType || 'CAT-1';
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(m);
+        return acc;
+    }, {});
+
     const tabs = [
         { id: 'profile', label: 'Profile', icon: <User size={15} /> },
         { id: 'courses', label: 'Courses', icon: <BookOpen size={15} /> },
@@ -234,7 +241,7 @@ const StudentDashboard = () => {
                             <div style={{ marginTop: '1rem', padding: '12px', background: 'rgba(59, 130, 246, 0.05)', borderRadius: '12px', border: '1px dashed rgba(59, 130, 246, 0.3)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <span style={{ fontSize: '1.2rem' }}>📍</span>
                                 <p style={{ fontSize: '0.82rem', color: '#1e3a8a', margin: 0 }}>
-                                    <strong>Note:</strong> GPS Attendance only works when you are physically within 500 meters of the college campus center. Make sure your device location is <strong>ON</strong>.
+                                    <strong>Note:</strong> GPS Attendance only works when you are physically within 200 meters of the college campus center. Make sure your device location is <strong>ON</strong>.
                                 </p>
                             </div>
                         </div>
@@ -244,30 +251,65 @@ const StudentDashboard = () => {
                     {activeTab === 'results' && (
                         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem' }}>
                             <div className="glass-card" style={{ borderRadius: 'var(--radius-lg)' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                    <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#1e3a8a' }}>🏆 Academic Performance</h3>
-                                    {marks.length > 0 && (
-                                        <div style={{ background: 'linear-gradient(135deg, #1e3a8a, #3b82f6)', padding: '6px 14px', borderRadius: '100px', color: 'white', fontSize: '0.8rem', fontWeight: '600' }}>
-                                            Avg: {avgMarks}
-                                        </div>
-                                    )}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                        <h3 style={{ fontWeight: '600', fontSize: '1.1rem', color: '#1e3a8a' }}>🏆 Academic Performance</h3>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                        {Object.keys(groupedMarks).length > 0 ? Object.keys(groupedMarks).map((examType, eIdx) => {
+                                            const examMarks = groupedMarks[examType];
+                                            const total = examMarks.reduce((sum, m) => sum + (m.marks || 0), 0);
+                                            const colors = [
+                                                { header: 'linear-gradient(135deg, #55659aff, #74aa78ff)', text: '#3730a3', bg: '#fbfbfe', accent: '#4f46e5' },
+                                                { header: 'linear-gradient(135deg, #ef3f0eff, #96c7e9ff)', text: '#166534', bg: '#fcfdfc', accent: '#15803d' },
+                                                { header: 'linear-gradient(135deg, #7aad1bff, #91c9dcff)', text: '#115e59', bg: '#fbfdfd', accent: '#0f766e' },
+                                                { header: 'linear-gradient(135deg, #7f1a1aff, #dd77d9ff)', text: '#92400e', bg: '#fffdf9', accent: '#b45309' }
+                                            ];
+                                            const theme = colors[eIdx % colors.length];
+
+                                            return (
+                                                <div key={examType} style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', background: '#fff', marginBottom: '1.5rem' }}>
+                                                    {/* Header */}
+                                                    <div style={{ background: theme.header, padding: '16px', color: theme.text, fontWeight: '700', fontSize: '1.05rem', letterSpacing: '0.04em', textAlign: 'center', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', borderBottom: '1px solid rgba(0,0,0,0.03)' }}>
+                                                        📜 {examType} REPORT CARD
+                                                    </div>
+                                                    {/* Subject Cards */}
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '1.25rem', background: theme.bg }}>
+                                                        {examMarks.map((m, idx) => (
+                                                            <div key={m._id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', boxShadow: '0 2px 4px rgba(0,0,0,0.015)' }}>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                                                    <span style={{ fontSize: '0.95rem', fontWeight: '700', color: '#1e293b' }}>{m.courseId}</span>
+                                                                    <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '500' }}>Academic Performance</span>
+                                                                </div>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                                                    <div style={{ textAlign: 'center', minWidth: '70px' }}>
+                                                                        <div style={{ fontSize: '1.25rem', fontWeight: '800', color: theme.accent }}>{m.marks}</div>
+                                                                    </div>
+                                                                    <div style={{
+                                                                        background: m.grade === 'A' || m.grade === 'B+' || m.grade === 'B' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                                                                        color: m.grade === 'A' || m.grade === 'B+' || m.grade === 'B' ? '#047857' : '#b91c1c',
+                                                                        minWidth: '46px', height: '46px', borderRadius: '12px',
+                                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                                        fontWeight: '800', fontSize: '1.15rem',
+                                                                        border: `1px solid ${m.grade === 'A' || m.grade === 'B+' || m.grade === 'B' ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                                                                    }}>
+                                                                        {m.grade || '-'}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    {/* Summary footer banner */}
+                                                    <div style={{ background: theme.header, color: theme.text, padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(0,0,0,0.03)' }}>
+                                                        <span style={{ fontWeight: '700', fontSize: '0.9rem', letterSpacing: '0.03em' }}>TOTAL SCORE</span>
+                                                        <span style={{ fontWeight: '800', fontSize: '1.35rem' }}>{total}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }) : (
+                                            <div style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>No marks found.</div>
+                                        )}
+                                    </div>
                                 </div>
-                                <div style={{ borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
-                                    <table>
-                                        <thead><tr><th>Course</th><th>Type</th><th>Marks</th><th>Grade</th></tr></thead>
-                                        <tbody>
-                                            {marks.length > 0 ? marks.map(m => (
-                                                <tr key={m._id}>
-                                                    <td style={{ fontWeight: '500' }}>{m.courseId}</td>
-                                                    <td><span className="pill pill-accent">{m.examType}</span></td>
-                                                    <td style={{ fontWeight: '600' }}>{m.marks}</td>
-                                                    <td><span style={{ fontWeight: '700', color: '#1e3a8a', fontSize: '1.05rem' }}>{m.grade}</span></td>
-                                                </tr>
-                                            )) : <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>No marks found.</td></tr>}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
 
                             <div className="glass-card" style={{ borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>

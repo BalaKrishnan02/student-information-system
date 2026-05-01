@@ -50,3 +50,10 @@ A full-stack Student Information System built with React, Node.js, Express, and 
 - **Frontend**: React (Vite), CSS (Glassmorphism)
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose)
+URL: https://acadex-mu.vercel.app/
+
+Login Credentials:
+Admin: [EMAIL_ADDRESS] / admin123
+Teacher: [EMAIL_ADDRESS] / teacher123
+Student: [EMAIL_ADDRESS] / student123
+
