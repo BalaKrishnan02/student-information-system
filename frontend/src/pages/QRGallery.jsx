@@ -228,7 +228,7 @@ const QRGallery = () => {
 
                                         {/* User Details */}
                                         <div style={{ zIndex: 1, width: '100%', paddingBottom: '0.5rem' }}>
-                                            <div style={{ fontWeight: '800', color: 'white', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem', wordBreak: 'break-word' }}>
+                                            <div style={{ fontWeight: '800', color: 'white', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 5px' }}>
                                                 {qr.name || qr.id}
                                             </div>
                                             {/* Subtle separator below name */}
