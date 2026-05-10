@@ -65,6 +65,10 @@ router.delete('/delete/:id', async (req, res) => {
     try {
         const deleted = await Teacher.findOneAndDelete({ teacherId: req.params.id });
         if (!deleted) {
+            const mongoose = require('mongoose');
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                return res.status(404).json({ message: 'Teacher not found by ID' });
+            }
             const byId = await Teacher.findByIdAndDelete(req.params.id);
             if (!byId) return res.status(404).json({ message: 'Teacher not found' });
             await User.findOneAndDelete({ username: byId.teacherId });
@@ -80,9 +84,17 @@ router.delete('/delete/:id', async (req, res) => {
 // Update Teacher
 router.put('/update/:id', async (req, res) => {
     try {
+        const updateData = { ...req.body };
+
+        if (updateData.firstName || updateData.lastName) {
+            const firstName = updateData.firstName || '';
+            const lastName = updateData.lastName || '';
+            updateData.name = `${firstName} ${lastName}`.trim();
+        }
+
         const updatedTeacher = await Teacher.findOneAndUpdate(
             { teacherId: req.params.id },
-            req.body,
+            updateData,
             { new: true }
         );
         if (!updatedTeacher) return res.status(404).json({ message: 'Teacher not found' });

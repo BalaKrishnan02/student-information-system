@@ -114,6 +114,12 @@ router.put('/update/:id', upload.single('photo'), async (req, res) => {
             updateData.photo = '';
         }
 
+        if (updateData.firstName || updateData.lastName) {
+            const firstName = updateData.firstName || '';
+            const lastName = updateData.lastName || '';
+            updateData.name = `${firstName} ${lastName}`.trim();
+        }
+
         const updatedStudent = await Student.findOneAndUpdate(
             { studentId: req.params.id },
             updateData,
@@ -122,7 +128,12 @@ router.put('/update/:id', upload.single('photo'), async (req, res) => {
 
         if (!updatedStudent) {
             // try by _id
-            const byId = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const mongoose = require('mongoose');
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                return res.status(404).json({ message: 'Student not found by ID' });
+            }
+            
+            const byId = await Student.findByIdAndUpdate(req.params.id, updateData, { new: true });
             if (!byId) return res.status(404).json({ message: 'Student not found' });
 
             if (updateData.studentId && req.params.id !== updateData.studentId) {
@@ -150,6 +161,10 @@ router.delete('/delete/:id', async (req, res) => {
     try {
         const deleted = await Student.findOneAndDelete({ studentId: req.params.id });
         if (!deleted) {
+            const mongoose = require('mongoose');
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                return res.status(404).json({ message: 'Student not found by ID' });
+            }
             const byId = await Student.findByIdAndDelete(req.params.id);
             if (!byId) return res.status(404).json({ message: 'Student not found' });
             await User.findOneAndDelete({ username: byId.studentId });
