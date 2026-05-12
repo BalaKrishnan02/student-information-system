@@ -175,8 +175,19 @@ app.get('/api/qrcode-download-all', async (req, res) => {
     }
 });
 
-app.use('/qrcode', express.static(path.join(__dirname, 'qrcode')));
-app.use('/profile', express.static(path.join(__dirname, 'profile')));
+app.use('/qrcode', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+}, express.static(path.join(__dirname, 'qrcode')));
+
+app.use('/profile', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+}, express.static(path.join(__dirname, 'profile')));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
